@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecto QR</title>
+</head>
+<body>
+    <script src="html5-qrcode.min.js"></script>
+<style>
+  .result{
+    background-color: green;
+    color:#fff;
+    padding:20px;
+  }
+  .row{
+    display:flex;
+  }
+  
+  .col{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+</style>
+
+<h1 style="text-align: center;">Reclama tu descuento leyendo el código QR</h1>
+
+<div style="text-align: center;">
+  <button  id="descuento">reclamar descuento</button>
+</div>
+<br>
+<br>
+
+<div  style="display:none;" class="row">
+  <div class="col">
+    <div style="width:500px;" id="reader"></div>
+  </div>
+  <div class="col" style="padding:30px;">
+    <h4>SCAN RESULT</h4>
+    <div id="result">Result Here</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  let flag = new Boolean(true);
+  const descuento = document.querySelector("#descuento");
+  const contenedor = document.querySelector(".row");
+
+  //Se habilita el lector
+  descuento.addEventListener('click', ()=>{
+    console.log("Hundí el boton");
+    if(flag == true){
+      contenedor.style.display = "block";
+      flag = false;
+    }else{
+      contenedor.style.display = "none";
+      document.getElementById('result').innerHTML = "";
+      flag = true;
+    }
+    
+    
+
+  });
+function onScanSuccess(qrCodeMessage) {
+    console.log("esto es lo que lee el QR:" , qrCodeMessage);
+    if(qrCodeMessage == "Restaurante La Negra, Code:XDXD"){
+        console.log("Hola Mundo");
+        document.getElementById('result').innerHTML = '<span class="result">'+qrCodeMessage+'</span>'+
+        '<h1>"10% de descuento en cualquier plato que elija"</h1>';
+    }else{
+      document.getElementById('result').innerHTML = '<span class="result">'+qrCodeMessage+'</span>'+
+        '<h1>"QR invalido, no registrado en la base de datos"</h1>';
+    }
+    
+}
+
+function onScanError(errorMessage) {
+  //handle scan error
+}
+
+var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+</script>
+</body>
+</html>
